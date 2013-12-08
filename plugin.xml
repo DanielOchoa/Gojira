@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+    id="com.poeticsystems.plugin.gojira"
+    version="1.0.0">
+
+    <name>Gojira</name>
+
+    <description>
+      A plugin for Cordova to enable native nativation and loading of web views.
+    </description>
+
+    <js-module src="www/gojira.js" name="gojira">
+        <clobbers target="com.plugin.gojira" />
+    </js-module>
+
+    <asset src="www/gojira.js" target="gojira.js" />
+
+    <engines>
+      <engine name="cordova" version=">=3.0.0" />
+    </engines>
+
+    <!-- ios -->
+    <platform name="ios">
+
+      <config-file target="config.xml" parent="/*/plugins">
+        <plugin name="Gojira" value="Gojira" onload="true" />
+      </config-file>
+
+      <config-file target="config.xml" parent="/widget">
+        <feature name="Gojira">
+          <param name="ios-package" value="Gojira"/>
+          <param name="onload" value="true" />
+        </feature>
+      </config-file>
+
+      <header-file src="src/ios/Gojira.h" />
+      <source-file src="src/ios/Gojira.m" />
+      <resource-file src="/src/ios/GojiraViewController.h" />
+      <resource-file src="/src/ios/GojiraViewController.m" />
+
+    </platform>
+</plugin>
+
