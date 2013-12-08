@@ -5,10 +5,12 @@
 
 @property (nonatomic, retain) NSMutableArray *controllerStack;
 @property (nonatomic, copy) NSString *filename;
+@property (nonatomic, retain) UINavigationController *navController;
 
-- (void)launch
+- (void)launch:(CDVInvokedUrlCommand *)command
 - (void)stop
 - (void)newViewCtrl:(CDVInvokedUrlCommand *)command;
+- (void)back;
 
 @end
 
