@@ -35,8 +35,8 @@
 
       <header-file src="src/ios/Gojira.h" />
       <source-file src="src/ios/Gojira.m" />
-      <resource-file src="/src/ios/GojiraViewController.h" />
-      <resource-file src="/src/ios/GojiraViewController.m" />
+      <header-file src="/src/ios/GojiraViewController.h" />
+      <source-file src="/src/ios/GojiraViewController.m" />
 
     </platform>
 </plugin>
