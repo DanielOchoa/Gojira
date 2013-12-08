@@ -1,8 +1,8 @@
-window.gojira = function(callback) {
+gojira = function(callback) {
   cordova.exec(callback, callback(false), 'Gojira', 'launch', []);
 }
 
-window.gojira = function(callback) {
+gojira = function(callback) {
   cordova.exec(callback, callback(false), 'Gojira', 'stop', []);
 }
 
