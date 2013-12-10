@@ -1,32 +1,44 @@
-#import "Gojira.h"
 #import <Cordova/CDV.h>
+#import "Gojira.h"
+#import "GojiraViewController.h"
+
 
 @implementation Gojira
 
-@synthesize controllerStack;
-@synthesize filename;
+@synthesize screenBounds;
 
 - (Gojira *)initWithWebView:(UIWebView *)theWebView
 {
-  self = [super initWithWebView:theWebView];
-  return self;
+    self.screenBounds = [[UIScreen mainScreen] bounds];
+    self = [super initWithWebView:theWebView];
+    return self;
 }
 
 - (void)launch:(CDVInvokedUrlCommand *)command
 {
-  CDVPluginResult *pluginResult = nil;
-  NSString *url = [command.arguments objectAtIndex:0];
+    CDVPluginResult *pluginResult = nil;
+    NSString *url = [command.arguments objectAtIndex:0];
 
-  if (url != nil && [url length] > 0) {
-    // instanciate new gojiraviewctrl with view set to absoluteURL here
-    GojiraViewController *newView = [GojiraViewController new];
-    newView.startPage = url;
+    if (url != nil && [url length] > 0) {
+        UIViewController *newView = [[UIViewController alloc] initWithNibName:nil bundle:nil];
+        CDVViewController *viewController = [CDVViewController new];
+        viewController.wwwFolderName = @"www";
+        viewController.startPage = url;
 
-    self.navController = [[UINavigationController alloc] initWithRootViewController:newView];
-  }
+        [newView setView:[[UIView alloc] init]];
+        newView.view.frame = self.screenBounds;
+        viewController.view.frame = self.screenBounds;
+        [newView.view addSubview:viewController.view];
 
-  pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_NO_RESULT];
-  [self.commandDelegate sendPluginResult:pluginResult callbackId:[command callbackId]];
+
+        self.navController = [[UINavigationController alloc] initWithRootViewController:newView];
+        self.navController.navigationBarHidden = YES;
+
+        [[[self.appDelegate window] rootViewController] presentViewController:self.navController animated:YES completion:nil];
+    }
+
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_NO_RESULT];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:[command callbackId]];
 }
 
 - (void)stop
@@ -36,12 +48,34 @@
 
 - (void)newViewCtrl:(CDVInvokedUrlCommand *)command
 {
+    CDVPluginResult *pluginResult = nil;
+    NSString *url = [command.arguments objectAtIndex:0];
 
+    UIViewController *newView = [[UIViewController alloc] initWithNibName:nil bundle:nil];
+    CDVViewController *viewController = [CDVViewController new];
+    viewController.wwwFolderName = @"www";
+    viewController.startPage = url;
+
+    [newView setView:[[UIView alloc] init]];
+    newView.view.frame = self.screenBounds;
+    viewController.view.frame = self.screenBounds;
+    [newView.view addSubview:viewController.view];
+
+    [self.navController pushViewController:newView animated:YES];
+
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_NO_RESULT];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:[command callbackId]];
 }
 
-- (void)back
+- (void)back:(CDVInvokedUrlCommand *)command
 {
+    CDVPluginResult *pluginResult = nil;
+    //NSString *url = [command.arguments objectAtIndex:0];
+    NSLog(@"running!!");
+    [self.navController popViewControllerAnimated:YES];
 
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_NO_RESULT];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:[command callbackId]];
 }
 
 @end
