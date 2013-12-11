@@ -6,35 +6,33 @@
 @implementation Gojira
 
 @synthesize screenBounds;
+// We keep the instance (should only have one) of our Gojira class stored in this global var
+static Gojira *gojiraInstance;
 
 - (Gojira *)initWithWebView:(UIWebView *)theWebView
 {
     self.screenBounds = [[UIScreen mainScreen] bounds];
     self = [super initWithWebView:theWebView];
+    gojiraInstance = self;
     return self;
 }
 
 - (void)launch:(CDVInvokedUrlCommand *)command
 {
     CDVPluginResult *pluginResult = nil;
-    NSString *url = [command.arguments objectAtIndex:0];
+    NSString *url = [command argumentAtIndex:0];
 
     if (url != nil && [url length] > 0) {
-        UIViewController *newView = [[UIViewController alloc] initWithNibName:nil bundle:nil];
-        CDVViewController *viewController = [CDVViewController new];
-        viewController.wwwFolderName = @"www";
-        viewController.startPage = url;
 
-        [newView setView:[[UIView alloc] init]];
-        newView.view.frame = self.screenBounds;
-        viewController.view.frame = self.screenBounds;
-        [newView.view addSubview:viewController.view];
+        GojiraViewController *viewController = [[GojiraViewController alloc]
+                                                initWithFolderName:@"www"
+                                                andStartPage:url];
 
-
-        self.navController = [[UINavigationController alloc] initWithRootViewController:newView];
+        // Instanciate our NavController
+        self.navController = [[UINavigationController alloc] initWithRootViewController:viewController];
         self.navController.navigationBarHidden = YES;
 
-        [[[self.appDelegate window] rootViewController] presentViewController:self.navController animated:YES completion:nil];
+        [self.viewController presentViewController:self.navController animated:NO completion:nil];
     }
 
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_NO_RESULT];
@@ -51,17 +49,12 @@
     CDVPluginResult *pluginResult = nil;
     NSString *url = [command.arguments objectAtIndex:0];
 
-    UIViewController *newView = [[UIViewController alloc] initWithNibName:nil bundle:nil];
-    CDVViewController *viewController = [CDVViewController new];
-    viewController.wwwFolderName = @"www";
-    viewController.startPage = url;
+    GojiraViewController *viewController = [[GojiraViewController alloc]
+                                            initWithFolderName:@"www"
+                                            andStartPage:url];
+    //[viewController.webView stringByEvaluatingJavaScriptFromString:@"setTimeout(function(){alert('hi');}, 500);"];
 
-    [newView setView:[[UIView alloc] init]];
-    newView.view.frame = self.screenBounds;
-    viewController.view.frame = self.screenBounds;
-    [newView.view addSubview:viewController.view];
-
-    [self.navController pushViewController:newView animated:YES];
+    [self.navController pushViewController:viewController animated:YES];
 
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_NO_RESULT];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:[command callbackId]];
@@ -71,9 +64,8 @@
 {
     CDVPluginResult *pluginResult = nil;
     //NSString *url = [command.arguments objectAtIndex:0];
-    NSLog(@"running!!");
     [self.navController popViewControllerAnimated:YES];
-
+    //[super writeJavascript:@"alert('hi')"];
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_NO_RESULT];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:[command callbackId]];
 }
