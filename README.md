@@ -16,6 +16,7 @@ gojira.launch('someFile.html');
 This stacks a new webview into the current navigation controller.
 ```javascript
 gojira.newView('someFile.html');
+```
 
 This goes back to the previous view.
 ```javascript
