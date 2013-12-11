@@ -19,7 +19,7 @@ gojira.newView('someFile.html');
 
 This goes back to the previous view.
 ```javascript
-gojira.back()
+gojira.back();
 ```
 
 More magic coming soon!
