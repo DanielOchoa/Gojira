@@ -48,23 +48,19 @@ static Gojira *gojiraInstance;
 
 - (void)newView:(CDVInvokedUrlCommand *)command
 {
-    [Gojira newViewCtrl:command];
+    [Gojira newViewCtrl:[command argumentAtIndex:0]];
+    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_NO_RESULT];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:[command callbackId]];
 }
 
-+ (void)newViewCtrl:(CDVInvokedUrlCommand *)command
++ (void)newViewCtrl:(NSString *)url
 {
-    CDVPluginResult *pluginResult = nil;
-    NSString *url = [command.arguments objectAtIndex:0];
-
     GojiraViewController *viewController = [[GojiraViewController alloc]
                                             initWithFolderName:@"www"
                                             andStartPage:url];
 
     // push our view controller into the stack
     [gojiraInstance.navController pushViewController:viewController animated:YES];
-
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_NO_RESULT];
-    [gojiraInstance.commandDelegate sendPluginResult:pluginResult callbackId:[command callbackId]];
 }
 
 - (void)back:(CDVInvokedUrlCommand *)command
