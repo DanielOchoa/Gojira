@@ -48,9 +48,13 @@ static Gojira *gojiraInstance;
 
 - (void)newView:(CDVInvokedUrlCommand *)command
 {
-    [Gojira newViewCtrl:[command argumentAtIndex:0]];
-    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_NO_RESULT];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:[command callbackId]];
+    if (!self.navController) {
+        [NSException raise:@"Gojira Error" format:@"no instances of Gojira found. gojira.launch() needs to be called first."];
+    } else {
+        [Gojira newViewCtrl:[command argumentAtIndex:0]];
+        CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_NO_RESULT];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:[command callbackId]];
+    }
 }
 
 + (void)newViewCtrl:(NSString *)url
