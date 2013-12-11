@@ -14,7 +14,7 @@ gojira = {
   console.log('error instanciationg Gojira View.');
       },
       'Gojira',
-      'newViewCtrl',
+      'newView',
       [path]
     );
   },

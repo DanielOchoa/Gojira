@@ -6,14 +6,17 @@
 @implementation Gojira
 
 @synthesize screenBounds;
-// We keep the instance (should only have one) of our Gojira class stored in this global var
 static Gojira *gojiraInstance;
 
 - (Gojira *)initWithWebView:(UIWebView *)theWebView
 {
     self.screenBounds = [[UIScreen mainScreen] bounds];
     self = [super initWithWebView:theWebView];
-    gojiraInstance = self;
+
+    // will only get set the first time this class creates an instance.
+    if (!gojiraInstance) {
+        gojiraInstance = self;
+    }
     return self;
 }
 
@@ -31,10 +34,9 @@ static Gojira *gojiraInstance;
         // Instanciate our NavController
         self.navController = [[UINavigationController alloc] initWithRootViewController:viewController];
         self.navController.navigationBarHidden = YES;
-
         [self.viewController presentViewController:self.navController animated:NO completion:nil];
     }
-
+    // do we even need to return something?
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_NO_RESULT];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:[command callbackId]];
 }
@@ -44,7 +46,12 @@ static Gojira *gojiraInstance;
 
 }
 
-- (void)newViewCtrl:(CDVInvokedUrlCommand *)command
+- (void)newView:(CDVInvokedUrlCommand *)command
+{
+    [Gojira newViewCtrl:command];
+}
+
++ (void)newViewCtrl:(CDVInvokedUrlCommand *)command
 {
     CDVPluginResult *pluginResult = nil;
     NSString *url = [command.arguments objectAtIndex:0];
@@ -52,12 +59,12 @@ static Gojira *gojiraInstance;
     GojiraViewController *viewController = [[GojiraViewController alloc]
                                             initWithFolderName:@"www"
                                             andStartPage:url];
-    //[viewController.webView stringByEvaluatingJavaScriptFromString:@"setTimeout(function(){alert('hi');}, 500);"];
 
-    [self.navController pushViewController:viewController animated:YES];
+    // push our view controller into the stack
+    [gojiraInstance.navController pushViewController:viewController animated:YES];
 
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_NO_RESULT];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:[command callbackId]];
+    [gojiraInstance.commandDelegate sendPluginResult:pluginResult callbackId:[command callbackId]];
 }
 
 - (void)back:(CDVInvokedUrlCommand *)command
@@ -65,9 +72,13 @@ static Gojira *gojiraInstance;
     CDVPluginResult *pluginResult = nil;
     //NSString *url = [command.arguments objectAtIndex:0];
     [self.navController popViewControllerAnimated:YES];
-    //[super writeJavascript:@"alert('hi')"];
+
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_NO_RESULT];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:[command callbackId]];
 }
 
 @end
+
+// TODO: write these down so you can remember the method names
+//[viewController.webView stringByEvaluatingJavaScriptFromString:@"setTimeout(function(){alert('hi');}, 500);"];
+//[super writeJavascript:@"alert('hi')"];

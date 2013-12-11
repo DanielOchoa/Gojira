@@ -8,8 +8,11 @@
 
 - (void)launch:(CDVInvokedUrlCommand *)command;
 - (void)stop;
-- (void)newViewCtrl:(CDVInvokedUrlCommand *)command;
+- (void)newView:(CDVInvokedUrlCommand *)command;
 - (void)back:(CDVInvokedUrlCommand *) command;
+
+// Class Methods
++ (void)newViewCtrl:(CDVInvokedUrlCommand *)command;
 
 @end
 
