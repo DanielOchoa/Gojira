@@ -5,12 +5,10 @@
 
 @implementation Gojira
 
-@synthesize screenBounds;
 static Gojira *gojiraInstance;
 
 - (Gojira *)initWithWebView:(UIWebView *)theWebView
 {
-    self.screenBounds = [[UIScreen mainScreen] bounds];
     self = [super initWithWebView:theWebView];
 
     // will only get set the first time this class creates an instance.

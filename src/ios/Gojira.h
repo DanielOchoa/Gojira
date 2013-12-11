@@ -4,7 +4,6 @@
 @interface Gojira : CDVPlugin
 
 @property (nonatomic, retain) UINavigationController *navController;
-@property (nonatomic) CGRect screenBounds;
 
 - (void)launch:(CDVInvokedUrlCommand *)command;
 - (void)stop;
