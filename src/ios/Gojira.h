@@ -9,6 +9,7 @@
 - (void)stop;
 - (void)newView:(CDVInvokedUrlCommand *)command;
 - (void)back:(CDVInvokedUrlCommand *) command;
+- (void)postMessage:(CDVInvokedUrlCommand *)command;
 
 // Class Methods
 + (void)newViewCtrl:(CDVInvokedUrlCommand *)command;

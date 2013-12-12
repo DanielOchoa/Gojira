@@ -20,5 +20,14 @@ gojira = {
   },
   back: function() {
     cordova.exec(null, null, 'Gojira', 'back', ['true']);
+  },
+  postMessage: function(msg) {
+    msg = JSON.stringify(msg);
+    cordova.exec(null, null, 'Gojira', 'postMessage', [msg]);
+  },
+  send: function(msg) {
+    if (window.message) {
+      message(msg);
+    }
   }
 }

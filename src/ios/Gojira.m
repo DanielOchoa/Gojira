@@ -75,6 +75,28 @@ static Gojira *gojiraInstance;
     [self.commandDelegate sendPluginResult:pluginResult callbackId:[command callbackId]];
 }
 
+- (void)postMessage:(CDVInvokedUrlCommand *)command
+{
+    CDVPluginResult *pluginResult = nil;
+    if ([command argumentAtIndex:0] != nil) {
+        NSString *msg = [command argumentAtIndex:0];
+        [self broadcastMessage:msg];
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    } else {
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_NO_RESULT];
+    }
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:[command callbackId]];
+}
+
+- (void)broadcastMessage:(NSString *)messageObject
+{
+    NSArray *viewControllers = [gojiraInstance.navController viewControllers];
+    NSString *broadcast = [NSString stringWithFormat:@"gojira.send(JSON.parse('%@'));", messageObject];
+    for(GojiraViewController *viewController in viewControllers) {
+        [viewController.cViewController.webView stringByEvaluatingJavaScriptFromString:broadcast];
+    }
+}
+
 @end
 
 // TODO: write these down so you can remember the method names
