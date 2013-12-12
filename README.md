@@ -3,8 +3,6 @@ Gojira
 
 This is a Cordova Plugin that allows you to create native transitions with JS thus allowing you to create a multi-page application. In Other words - a hybrid application with native navigation. Mind. Blown.
 
-Support for messaging between views coming soon.
-
 Usage
 -----
 
@@ -21,6 +19,21 @@ gojira.newView('someFile.html');
 This goes back to the previous view.
 ```javascript
 gojira.back();
+```
+
+This sends a message from one view to another.
+```javascript
+gojira.postMessage({data: 'someData'});
+```
+
+Set this function anywhere to intercept an incoming message.
+```javascript
+window.message = function(msg) {
+  alert('message received!');
+  if(msg.data === 'someData') {
+    console.log(msg.data);
+  }
+}
 ```
 
 More magic coming soon!
