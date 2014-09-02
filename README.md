@@ -1,6 +1,8 @@
 Gojira
 ======
 
+*Update: I will soon start working on this project again. Multi pages are difficult since you lose the state of your app and it makes it very difficult to handle multi-page apps as one.
+
 This is a Cordova Plugin that allows you to create native transitions with JS thus allowing you to create a multi-page application. In Other words - a hybrid application with native navigation. Mind. Blown.
 
 Usage
